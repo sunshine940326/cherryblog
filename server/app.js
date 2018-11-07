@@ -1,4 +1,4 @@
-const Koa = require('koa');
+const Koa = require('koa')
 const mongoose = require('mongoose')
 const app = new Koa()
 const route = require('koa-route')
