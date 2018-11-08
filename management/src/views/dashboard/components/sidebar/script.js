@@ -1,8 +1,9 @@
-import SidebarItem from './sidebarItem'
+import sidebarItem from './sidebar-item'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'sideBar',
-  components: { SidebarItem },
+  components: { sidebarItem },
   data () {
     return {
       data: [{
@@ -50,5 +51,13 @@ export default {
     handleNodeClick (data) {
       console.log(data)
     }
+  },
+  computed: {
+    ...mapGetters([
+      'permission_routers'
+    ])
+  },
+  created () {
+    console.log('this.permission_routers', this.permission_routers)
   }
 }

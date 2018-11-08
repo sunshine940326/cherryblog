@@ -1,22 +1,22 @@
 <template>
   <div>
     <div class="app-wrapper" >
-      <sidebar class="sidebar-container"></sidebar>
+      <side-bar class="sidebar-container"></side-bar>
       <div class="main-container">
-        <navbar class="navbar-container"></navbar>
+        <nav-bar class="navbar-container"></nav-bar>
         <app-main class="app-main-container"></app-main>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { Sidebar, Navbar, AppMain } from './components/index'
+import { sideBar, navBar, appMain } from './components/index'
 export default{
   name: 'dashboard',
   components: {
-    Navbar,
-    Sidebar,
-    AppMain
+    navBar,
+    sideBar,
+    appMain
   }
 }
 </script>
@@ -27,8 +27,10 @@ export default{
   .sidebar-container
     width: 180px !important
     height: 100%
-    background: #333
+    // background: #333
     transition: width 0.28s
+    .el-menu
+      height: 100%
   .main-container
     flex-grow: 1
     .navbar-container

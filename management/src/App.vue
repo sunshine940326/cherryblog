@@ -17,6 +17,8 @@ export default {
 <style lang="sass">
 html,body
   height: 100%
+a
+  text-decoration: none
 #app .app-router-view
   position: absolute
   top: 0

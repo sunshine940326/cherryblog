@@ -1,5 +1,6 @@
 <div>
-  <el-tree :data="data" :props="defaultProps" @node-click="handleNodeClick" background-color="#304156" text-color="#bfcbd9" active-text-color="#409EFF"></el-tree>
-  <!-- <sidebar-item></sidebar-item> -->
+  <el-menu mode="vertical" :default-active="$route.path" background-color="#304156" text-color="#bfcbd9" active-text-color="#409EFF">
+    <sidebar-item v-for="route in permission_routers" :key="route.name" :item="route" :base-path="route.path"></sidebar-item>
+  </el-menu>
 </div>
 
