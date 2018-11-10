@@ -34,10 +34,14 @@ export default{
   .main-container
     flex-grow: 1
     .navbar-container
-      background: pink
+      display: flex
+      align-items: center
+      padding-left: 20px
+      // background: pink
       height: 50px
       line-height: 50px
+      border-bottom: solid 1px #e6e6e6
     .app-main-container
-      background: blue
+      // background: blue
       height: calc(100% - 50px)
 </style>
