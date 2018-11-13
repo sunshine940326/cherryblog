@@ -1,35 +1,31 @@
-// 加载模块
+const Koa = require('koa')
 const mongoose = require('mongoose')
+const app = new Koa()
+const router = require('koa-router')()
+const cors = require('koa2-cors')
+// 加载模块
 const Schema = mongoose.Schema
+const bodyParser = require('koa-bodyparser')
 
-mongoose.connect('mongodb://127.0.0.1:27017/cherryblog')
-
-const db = mongoose.connection
-//如果连接成功会执行error回调
-db.on("error", function (error) {
-  console.log("数据库连接失败：" + error)
-})
-//如果连接成功会执行open回调
-db.on("open", function () {
-  console.log("数据库连接成功")
-})
-db.on('close', () => {
-  console.log('数据库连接断开，重新连接...')
-  mongoose.connect(url, options)
-})
+app.use(cors({
+  origin: "*",
+  exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],
+  maxAge: 5,
+  credentials: true,
+  allowMethods: ['GET', 'POST', 'DELETE'],
+  allowHeaders: ['Content-Type', 'Authorization', 'Accept'],
+}))
 
 // Schema
 const articleSchema = new Schema({
   id: Number,
   title: {                             // 标题
     type: String,
-    required: true,
   },
   desc: String,                        // 描述
   cover: String,                       // 封面
   content: {                           // 内容
     type: String,
-    required: true
   },
   html: String,                        // HTML内容
   toc: Array,                          // TOC
@@ -52,54 +48,29 @@ const articleSchema = new Schema({
   author: {                            // 作者
     type: String,
     ref: 'User',
-    required: true
   }
 })
 
 //Model
 const articleModel = mongoose.model('article',articleSchema)
+articleModelCreate = async ctx => {
+  const req = ctx.request.body
+  const result = await articleModel.create({...req, createAt: new Date()})
+  return ctx.body = result
+}
+router.post('/article', articleModelCreate)
 
-// Entity
-const articleEntity = new articleModel({
-  title: '测试', //唯一不可重复
-  desc: '测试 desc',
-  content: '测试 content',
-  author: 'cherry'
-})
+// 进行requestbody解析
+app.use(bodyParser())
+app.use(router.routes()).use(router.allowedMethods())
 
-const articleEntity2 = new articleModel({
-  title: '测试2', //唯一不可重复
-  desc: '测试 desc2',
-  content: '测试 content2',
-  author: 'cherry2'
-})
+app.use(cors())
 
-const articleEntity3 = new articleModel({
-  title: '测试3', //唯一不可重复
-  desc: '测试 desc2',
-  content: '测试 content2',
-  author: 'cherry2'
-})
-
-// 增 [Model.create(doc(s), [callback])]
-articleEntity.save(function(error,doc){
-  if(error){
-     console.log("error :" + error)
-  }else{
-     console.log(doc)
+mongoose.connect('mongodb://localhost:27017/cherryblog', { useNewUrlParser: true }, function (err) {
+  if (err) {
+    console.log("数据库连接失败")
+  } else {
+    console.log("数据库连接成功")
+    app.listen(3030) //监听http请求
   }
 })
-
-articleEntity2.save()
-
-articleEntity3.save()
-// 删 [Model.remove(conditions, [callback])] 
-// 删除 title 为 测试2 的数据
-articleModel.remove({title: '测试2'},function(err,docs){})
-
-// 查 [Model.find(conditions, [projection], [options], [callback])]
-// 
-const result = articleModel.find({title: '测试'},function(err,docs){
-})
-
-console.log(result)
