@@ -15,6 +15,7 @@ export const constantRouterMap = [
     meta: { title: '首页', icon: 'el-icon-share' }, // 在左侧 menuTree 中显示的名字和 icon
     // 根据 children 的数量判断当前 menu 是叶子节点还是根节点，
     // 不将所有的 children 都放在 / 下面是因为方便面包屑
+    // 对于只有一级的菜单不设置 meta 信息，面包屑会读取 meta 中的信息生成
     children: [
       {
         path: 'dashboard',
@@ -27,12 +28,11 @@ export const constantRouterMap = [
     component: layout,
     hidden: false,
     // redirect: 'noredirect',
-    meta: { title: '一级目录', icon: 'el-icon-menu' },
+    meta: { title: '登录', icon: 'el-icon-menu' },
     children: [
       {
-        path: 'login',
+        path: '/login',
         component: _import('login/index'),
-        meta: { title: 'login', icon: 'icon' }
       }
     ]
   },
@@ -44,16 +44,8 @@ export const constantRouterMap = [
     meta: { title: '404', icon: 'el-icon-edit' },
     children: [
       {
-        path: 'article',
-        component: _import('article/index'),
-        hidden: false,
-        meta: { title: '404article', icon: 'el-icon-edit' }
-      },
-      {
-        path: 'article2',
-        component: _import('article2/index'),
-        hidden: false,
-        meta: { title: '404article2', icon: 'el-icon-delete' }
+        path: '/404',
+        component: _import('404/index'),
       }
     ]
   },
@@ -64,10 +56,98 @@ export const constantRouterMap = [
     meta: { title: 'icons', icon: 'el-icon-delete' },
     children: [
       {
-        path: 'icon',
+        path: '/icon',
         component: _import('icon/index'),
         hidden: false,
-        meta: { title: 'iconindex', icon: 'el-icon-edit' }
+      }
+    ]
+  },
+  {
+    path: '/article',
+    component: layout,
+    hidden: false,
+    name: 'articleList',
+    meta: { title: '文章管理', icon: 'el-icon-document' },
+    children: [
+      {
+        path: '/article',
+        component: _import('article/index'),
+        hidden: false,
+        name: 'articleList',
+      }
+    ]
+  },
+  {
+    path: '/article/edit/:articleId',
+    component: layout,
+    hidden: true,
+    name: 'articleEdit',
+    meta: { title: '文章管理', icon: 'el-icon-document' },
+    children: [
+      {
+        path: '/article/edit/:articleId',
+        name: 'articleEdit',
+        component: _import('article/index'),
+        hidden: true,
+        meta: { title: '文章编辑' }
+      }
+    ]
+  },
+  {
+    path: '/article/detail/:articleId',
+    component: layout,
+    hidden: true,
+    name: 'articleDetail',
+    meta: { title: '文章管理', icon: 'el-icon-document' },
+    children: [
+      {
+        path: '/article/edit/:articleId',
+        name: 'articleDetail',
+        component: _import('article/index'),
+        hidden: true,
+        meta: { title: '文章详情' }
+      }
+    ]
+  },
+  {
+    path: '/article/create',
+    component: layout,
+    name: 'articleCreate',
+    hidden: true,
+    meta: { title: '文章管理', icon: 'el-icon-document' },
+    children: [
+      {
+        path: '/article/create',
+        name: 'articleCreate',
+        component: _import('article/article-form/article-form'),
+        hidden: true,
+        meta: { title: '新建文章' }
+      }
+    ]
+  },
+  {
+    path: '/tag/:tagId',
+    component: layout,
+    hidden: false,
+    meta: { title: '标签管理', icon: 'el-icon-info' },
+    children: [
+      {
+        path: '/tag/:tagId',
+        component: _import('tag/index'),
+        hidden: false,
+      }
+    ]
+  },
+  {
+    path: '/classify/:classifiesId',
+    component: layout,
+    hidden: false,
+    meta: { title: '分类管理', icon: 'el-icon-star-on' },
+    children: [
+      {
+        path: '/classify/:classifiesId',
+        component: _import('classify/index'),
+        hidden: false,
       }
     ]
   }

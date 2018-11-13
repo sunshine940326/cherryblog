@@ -21,7 +21,8 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
-    semi: [2, 'never'],
+    'quotes': [0, 'single'],
+    'semi': [2, 'never'],
     // allow paren-less arrow functions
     'arrow-parens': 0,
     // allow async-await

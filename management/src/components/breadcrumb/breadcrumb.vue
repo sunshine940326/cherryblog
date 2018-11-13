@@ -40,14 +40,14 @@ export default {
 </script>
 <style lang="sass" scoped>
 .breadcrumb-enter-active,
-.breadcrumb-leave-active 
+.breadcrumb-leave-active
   transition: all .5s
 .breadcrumb-enter,
-.breadcrumb-leave-active 
+.breadcrumb-leave-active
   opacity: 0
   transform: translateX(20px)
-.breadcrumb-move 
+.breadcrumb-move
   transition: all .5s
-.breadcrumb-leave-active 
+.breadcrumb-leave-active
   position: absolute
 </style>

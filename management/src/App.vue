@@ -17,6 +17,7 @@ export default {
 <style lang="sass">
 html,body
   height: 100%
+  overflow: hidden
 a
   text-decoration: none
 #app .app-router-view

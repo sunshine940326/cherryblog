@@ -16,5 +16,6 @@ export default {
 .app-main
   min-height: calc(100vh - 84px)
   position: relative
-  overflow: hidden
+  overflow: scroll
+  padding: 20px
 </style>

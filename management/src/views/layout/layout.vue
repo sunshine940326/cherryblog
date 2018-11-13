@@ -24,15 +24,20 @@ export default{
 .app-wrapper
   display: flex
   height: 100%
+  overflow: scroll
   .sidebar-container
-    width: 180px !important
+    width: 180px
     height: 100%
     // background: #333
     transition: width 0.28s
+    position: fixed
     .el-menu
       height: 100%
   .main-container
     flex-grow: 1
+    margin-left: 180px
+    height: 100%
+    overflow: scroll
     .navbar-container
       display: flex
       align-items: center

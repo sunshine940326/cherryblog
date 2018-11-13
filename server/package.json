@@ -5,12 +5,7 @@
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
-    "body-parser": "^1.18.3",
-    "cookies": "^0.7.2",
-    "koa": "^2.6.1",
-    "koa-route": "^3.2.0",
-    "koa2-cors": "^2.0.6",
-    "mongoose": "^5.3.8"
+    "body-parser": "^1.18.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

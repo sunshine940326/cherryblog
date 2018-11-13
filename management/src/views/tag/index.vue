@@ -1,11 +1,11 @@
 <template>
   <div>
-    this is article2
+    this is tag
   </div>
 </template>
 <script>
 export default {
-  name: 'article2'
+  name: 'tag'
 }
 </script>
 <style lang="sass" scoped>
