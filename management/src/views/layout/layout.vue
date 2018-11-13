@@ -1,22 +1,22 @@
 <template>
   <div>
     <div class="app-wrapper" >
-      <sidebar class="sidebar-container"></sidebar>
+      <side-bar class="sidebar-container"></side-bar>
       <div class="main-container">
-        <navbar class="navbar-container"></navbar>
+        <nav-bar class="navbar-container"></nav-bar>
         <app-main class="app-main-container"></app-main>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { Sidebar, Navbar, AppMain } from './components/index'
+import { sideBar, navBar, appMain } from './components/index'
 export default{
   name: 'dashboard',
   components: {
-    Navbar,
-    Sidebar,
-    AppMain
+    navBar,
+    sideBar,
+    appMain
   }
 }
 </script>
@@ -24,18 +24,29 @@ export default{
 .app-wrapper
   display: flex
   height: 100%
+  overflow: scroll
   .sidebar-container
-    width: 180px !important
+    width: 180px
     height: 100%
-    background: #333
+    // background: #333
     transition: width 0.28s
+    position: fixed
+    .el-menu
+      height: 100%
   .main-container
     flex-grow: 1
+    margin-left: 180px
+    height: 100%
+    overflow: scroll
     .navbar-container
-      background: pink
+      display: flex
+      align-items: center
+      padding-left: 20px
+      // background: pink
       height: 50px
       line-height: 50px
+      border-bottom: solid 1px #e6e6e6
     .app-main-container
-      background: blue
+      // background: blue
       height: calc(100% - 50px)
 </style>
