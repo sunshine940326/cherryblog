@@ -10,28 +10,24 @@ import SimpleMDE from 'simplemde'
 
 export default {
   name: 'cMarkdownEditor',
-
   props: {
-    value: String,
+    value: String
   },
-
-  data() {
+  data () {
     return {
       mdEditor: null,
-      hasChange: false,
+      hasChange: false
     }
   },
-
   watch: {
-    value(newVal)  {
+    value (newVal) {
       if (newVal === this.mdEditor.value()) {
         return
       }
       this.mdEditor.value(newVal)
     }
   },
-
-  mounted() {
+  mounted () {
     this.mdEditor = new SimpleMDE({
       element: this.$refs['mdEditor']
     })
@@ -40,9 +36,8 @@ export default {
       this.$emit('input', this.mdEditor.value())
     })
   },
-
-  destroyed() {
+  destroyed () {
     this.mdEditor = null
-  },
+  }
 }
 </script>

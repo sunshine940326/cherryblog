@@ -32,7 +32,7 @@ export const constantRouterMap = [
     children: [
       {
         path: '/login',
-        component: _import('login/index'),
+        component: _import('login/index')
       }
     ]
   },
@@ -45,7 +45,7 @@ export const constantRouterMap = [
     children: [
       {
         path: '/404',
-        component: _import('404/index'),
+        component: _import('404/index')
       }
     ]
   },
@@ -58,7 +58,7 @@ export const constantRouterMap = [
       {
         path: '/icon',
         component: _import('icon/index'),
-        hidden: false,
+        hidden: false
       }
     ]
   },
@@ -73,7 +73,7 @@ export const constantRouterMap = [
         path: '/article',
         component: _import('article/index'),
         hidden: false,
-        name: 'articleList',
+        name: 'articleList'
       }
     ]
   },
@@ -134,7 +134,7 @@ export const constantRouterMap = [
       {
         path: '/tag/:tagId',
         component: _import('tag/index'),
-        hidden: false,
+        hidden: false
       }
     ]
   },
@@ -147,7 +147,7 @@ export const constantRouterMap = [
       {
         path: '/classify/:classifiesId',
         component: _import('classify/index'),
-        hidden: false,
+        hidden: false
       }
     ]
   }

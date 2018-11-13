@@ -8,7 +8,7 @@
         <el-input v-model="form.des"></el-input>
       </el-form-item>
       <el-form-item label="内容：">
-        <c-markdown-editor v-model="form.content" class="editor" ref="editor" ></c-markdown-editor>
+        <c-markdown-editor v-model="form.content" class="editor" ref="editor"></c-markdown-editor>
       </el-form-item>
       <el-form-item label="分类：">
         <el-select v-model="form.classify" placeholder="活动区域">
@@ -73,12 +73,24 @@ export default {
       }, {
         value: '选项5',
         label: '北京烤鸭'
-      }],
+      }]
     }
   },
   methods: {
-    onSubmit () {
-      console.log('submit!')
+    async onSubmit () {
+      const req = {
+        url: 'http://localhost:3030/article',
+        method: 'POST',
+        data: this.form
+      }
+
+      try {
+        const res = await this.$http(req)
+        console.log(res)
+        return `发表文章成功`
+      } catch (err) {
+        console.log(err)
+      }
     },
     handleCancel () {
       history.go(-1)
