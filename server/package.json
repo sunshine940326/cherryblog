@@ -11,7 +11,8 @@
     "koa-bodyparser": "^4.2.1",
     "koa-router": "^7.4.0",
     "koa2-cors": "^2.0.6",
-    "mongoose": "^5.3.8"
+    "mongoose": "^5.3.8",
+    "mongoose-paginate": "^5.0.3"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
