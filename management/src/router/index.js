@@ -78,22 +78,6 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/article/edit/:articleId',
-    component: layout,
-    hidden: true,
-    name: 'articleEdit',
-    meta: { title: '文章管理', icon: 'el-icon-document' },
-    children: [
-      {
-        path: '/article/edit/:articleId',
-        name: 'articleEdit',
-        component: _import('article/index'),
-        hidden: true,
-        meta: { title: '文章编辑' }
-      }
-    ]
-  },
-  {
     path: '/article/detail/:articleId',
     component: layout,
     hidden: true,
@@ -122,6 +106,22 @@ export const constantRouterMap = [
         component: _import('article/article-form/article-form'),
         hidden: true,
         meta: { title: '新建文章' }
+      }
+    ]
+  },
+  {
+    path: '/article/edit/:articleId',
+    component: layout,
+    name: 'articleEdit',
+    hidden: true,
+    meta: { title: '文章管理', icon: 'el-icon-document' },
+    children: [
+      {
+        path: '/article/edit/:articleId',
+        name: 'articleEdit',
+        component: _import('article/article-form/article-form'),
+        hidden: true,
+        meta: { title: '编辑文章' }
       }
     ]
   },

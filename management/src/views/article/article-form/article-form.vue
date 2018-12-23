@@ -79,11 +79,10 @@ export default {
   methods: {
     async onSubmit () {
       const req = {
-        url: 'http://localhost:3030/article',
+        url: 'http://localhost:3030/createArticleItem',
         method: 'POST',
         data: this.form
       }
-
       try {
         const res = await this.$http(req)
         console.log(res)
@@ -94,6 +93,34 @@ export default {
     },
     handleCancel () {
       history.go(-1)
+    },
+    async queryArticle (id) {
+      const queryParams = {
+        title: this.queryTitle,
+        limit: this.limit,
+        offset: this.offset,
+        id: id
+      }
+      const req = {
+        url: 'http://localhost:3030/getArticleList',
+        method: 'POST',
+        data: queryParams
+      }
+      try {
+        const res = await this.$http(req)
+        this.form = res.data.articleList[0]
+        console.log('form', this.form)
+      } catch (err) {
+        console.log(err)
+      }
+    }
+  },
+  beforeMount () {
+    console.log('this.$route', this.$route)
+    if (this.$route.name === 'articleEdit') {
+      this.queryArticle(this.$route.params.articleId)
+    } else {
+      this.queryArticle()
     }
   }
 }

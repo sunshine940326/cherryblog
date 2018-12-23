@@ -69,7 +69,7 @@ export default {
     }
   },
   created () {
-    console.log('item', this.basePath)
+    // console.log('item', this.basePath)
   }
 }
 </script>
