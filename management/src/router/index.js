@@ -73,7 +73,48 @@ export const constantRouterMap = [
         path: '/article',
         component: _import('article/index'),
         hidden: false,
-        name: 'articleList'
+        name: 'articleList',
+        meta: { title: '文章列表', icon: 'el-icon-document' },
+      },
+      {
+        path: '/article/create',
+        name: 'articleCreate',
+        component: _import('article/article-form/article-form'),
+        hidden: false,
+        meta: { title: '新建文章', icon: 'el-icon-document'}
+      }
+    ]
+  },
+  {
+    path: '/tag',
+    component: layout,
+    hidden: false,
+    meta: { title: '标签管理', icon: 'el-icon-info' },
+    children: [
+      {
+        path: '/tag',
+        component: _import('tag/index'),
+        hidden: false,
+        meta: { title: '标签列表', icon: 'el-icon-info' },
+      },
+      {
+        path: '/tag/create',
+        component: _import('tag/index'),
+        hidden: false,
+        meta: { title: '新建标签', icon: 'el-icon-info' },
+      }
+    ]
+  },
+  {
+    path: '/classify/:classifiesId',
+    component: layout,
+    hidden: false,
+    meta: { title: '分类管理', icon: 'el-icon-star-on' },
+    children: [
+      {
+        path: '/classify/:classifiesId',
+        component: _import('classify/index'),
+        hidden: false
       }
     ]
   },
@@ -94,22 +135,6 @@ export const constantRouterMap = [
     ]
   },
   {
-    path: '/article/create',
-    component: layout,
-    name: 'articleCreate',
-    hidden: true,
-    meta: { title: '文章管理', icon: 'el-icon-document' },
-    children: [
-      {
-        path: '/article/create',
-        name: 'articleCreate',
-        component: _import('article/article-form/article-form'),
-        hidden: true,
-        meta: { title: '新建文章' }
-      }
-    ]
-  },
-  {
     path: '/article/edit/:articleId',
     component: layout,
     name: 'articleEdit',
@@ -122,32 +147,6 @@ export const constantRouterMap = [
         component: _import('article/article-form/article-form'),
         hidden: true,
         meta: { title: '编辑文章' }
-      }
-    ]
-  },
-  {
-    path: '/tag/:tagId',
-    component: layout,
-    hidden: false,
-    meta: { title: '标签管理', icon: 'el-icon-info' },
-    children: [
-      {
-        path: '/tag/:tagId',
-        component: _import('tag/index'),
-        hidden: false
-      }
-    ]
-  },
-  {
-    path: '/classify/:classifiesId',
-    component: layout,
-    hidden: false,
-    meta: { title: '分类管理', icon: 'el-icon-star-on' },
-    children: [
-      {
-        path: '/classify/:classifiesId',
-        component: _import('classify/index'),
-        hidden: false
       }
     ]
   }
