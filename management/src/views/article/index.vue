@@ -1,15 +1,15 @@
 <template>
   <div>
     <div class="article-search">
-      <el-select v-model="value" placeholder="分类">
-        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+      <el-select v-model="tag" placeholder="标签" clearable>
+        <el-option v-for="item in tagOptions" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-      <el-select v-model="value" placeholder="状态">
-        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+      <el-select v-model="state" placeholder="状态" clearable>
+        <el-option v-for="item in stateOptions" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-      <el-input v-model="queryTitle" placeholder="标题/描述" width="60px"></el-input>
+      <el-input v-model="queryTitle" placeholder="标题/描述" width="60px" clearable></el-input>
       <el-button type="primary" @click="CreateArticle">新建文章</el-button>
       <el-button type="primary" @click="queryArticle" icon="el-icon-search">搜索</el-button>
     </div>
@@ -21,9 +21,9 @@
           </el-table-column>
           <el-table-column prop="title" label="标题">
           </el-table-column>
-          <el-table-column prop="classify.title" label="分类">
+          <el-table-column prop="tag" label="标签" >
           </el-table-column>
-          <el-table-column prop="author.account" label="作者">
+          <el-table-column prop="author" label="作者">
           </el-table-column>
           <el-table-column prop="state" label="状态">
           </el-table-column>
@@ -62,38 +62,29 @@ export default {
   },
   data () {
     return {
-      options: [
-        {
-          value: "选项1",
-          label: "黄金糕"
-        },
-        {
-          value: "选项2",
-          label: "双皮奶"
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎"
-        },
-        {
-          value: "选项4",
-          label: "龙须面"
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭"
-        }
-      ],
-      value: "",
+      tag: "",
+      state: "",
       tableData: [],
       currentPage: 1,
       limit: 10,
-      queryTitle: null,
-      total: 0
+      queryTitle: '',
+      total: 0,
+      tagOptions: [],
+      stateOptions: [
+        {
+          label: "草稿",
+          value: "draft"
+        },
+        {
+          label: "发布",
+          value: "publish"
+        }
+      ]
     }
   },
   computed: {
     offset () {
+      console.log('offset', (this.currentPage - 1) * this.limit || 0)
       return (this.currentPage - 1) * this.limit || 0
     }
   },
@@ -111,19 +102,25 @@ export default {
       this.fetchArticles()
     },
     async fetchArticles () {
-      const queryParams = {
+      let queryParams = {
         title: this.queryTitle,
+        state: this.state,
+        tag: this.tag,
         limit: this.limit,
         offset: this.offset
       }
+      let conditions = {}
+      Object.keys(queryParams).map(key => {
+        queryParams[key] && (conditions[key] = queryParams[key])
+      })
       const req = {
         url: 'http://localhost:3030/getArticleList',
         method: 'POST',
-        data: queryParams
+        data: conditions
       }
       try {
         const res = await this.$http(req)
-        this.tableData = res.data.articleList
+        this.tableData = res.data.list
         this.total = res.data.total
       } catch (err) {
         console.log(err)
@@ -164,20 +161,40 @@ export default {
         })
         this.fetchArticles()
         loading.close()
-        this.$message({
+        this.$notify({
+          title: '成功',
           type: 'success',
           message: '删除成功!'
         })
       }).catch(() => {
-        this.$message({
+        this.$notify.info({
+          title: '消息',
           type: 'info',
           message: '已取消删除'
         })
       })
     }
   },
-  beforeMount () {
+  async beforeMount () {
+    console.log(this.$route)
     this.fetchArticles()
+    const req = {
+      url: 'http://localhost:3030/getTagList',
+      method: 'POST',
+      data: {}
+    }
+    try {
+      const res = await this.$http(req)
+      this.tagOptions = res.data.list.map(item => {
+        return {
+          value: item.tagValue,
+          label: item.tagValue
+        }
+      })
+      console.log('res', res.data)
+    } catch (err) {
+      console.log(err)
+    }
   }
 }
 </script>

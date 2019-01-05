@@ -2,23 +2,31 @@
   <div>
     <el-form ref="form" :model="form" label-width="80px">
       <el-form-item label="标题：">
-        <el-input v-model="form.title"></el-input>
+        <el-input v-model="form.title" clearable></el-input>
       </el-form-item>
       <el-form-item label="摘要：">
-        <el-input v-model="form.des"></el-input>
+        <el-input v-model="form.desc" clearable></el-input>
       </el-form-item>
       <el-form-item label="内容：">
         <c-markdown-editor v-model="form.content" class="editor" ref="editor"></c-markdown-editor>
       </el-form-item>
-      <el-form-item label="分类：">
+      <!-- <el-form-item label="分类：">
         <el-select v-model="form.classify" placeholder="活动区域">
           <el-option label="区域一" value="shanghai"></el-option>
           <el-option label="区域二" value="beijing"></el-option>
         </el-select>
+      </el-form-item> -->
+      <el-form-item label="作者：">
+        <el-input class="width200" clearable v-model="form.author"></el-input>
       </el-form-item>
       <el-form-item label="标签：">
-        <el-select v-model="form.tag" multiple placeholder="请选择">
-          <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+        <el-select class="width200" clearable v-model="form.tag"  placeholder="请选择">
+          <el-option
+            v-for="(item, index) in options"
+            :key="index"
+            :label="item.value"
+            :value="item.value"
+          >
           </el-option>
         </el-select>
       </el-form-item>
@@ -28,11 +36,10 @@
           <el-radio label="线下场地免费"></el-radio>
         </el-radio-group>
       </el-form-item> -->
-      <el-form-item label="状态：">
-        <el-radio-group v-model="form.status">
-          <el-radio :label="1">上线</el-radio>
-          <el-radio :label="2">下线</el-radio>
-        </el-radio-group>
+      <el-form-item label="状态：" clearable
+      >
+        <el-radio v-model="state" label="draft">草稿</el-radio>
+        <el-radio v-model="state" label="publish">上线</el-radio>
       </el-form-item>
     </el-form>
 
@@ -48,45 +55,64 @@ import cMarkdownEditor from '@/components/c-markdown-editor/c-markdown-editor'
 export default {
   name: 'articleForm',
   components: { cMarkdownEditor },
+  watch: {
+    form (value) {
+      console.log('value', value)
+    }
+  },
   data () {
     return {
       form: {
         title: '',
-        des: '',
+        desc: '',
         content: '',
-        classify: '',
-        tag: [],
-        status: 1
+        classify: [],
+        tag: []
       },
-      options: [{
-        value: '选项1',
-        label: '黄金糕'
-      }, {
-        value: '选项2',
-        label: '双皮奶'
-      }, {
-        value: '选项3',
-        label: '蚵仔煎'
-      }, {
-        value: '选项4',
-        label: '龙须面'
-      }, {
-        value: '选项5',
-        label: '北京烤鸭'
-      }]
+      options: [],
+      state: 'draft'
     }
   },
   methods: {
     async onSubmit () {
-      const req = {
+      const { content, desc, title, tag, author } = this.form
+      const editReq = {
+        url: 'http://localhost:3030/update',
+        method: 'POST',
+        data: {
+          id: this.$route.params.articleId,
+          content,
+          desc,
+          title,
+          state: this.state,
+          tag,
+          author
+        }
+      }
+      const createReq = {
         url: 'http://localhost:3030/createArticleItem',
         method: 'POST',
-        data: this.form
+        data: {
+          content,
+          desc,
+          title,
+          state: this.state,
+          tag,
+          author
+        }
       }
       try {
-        const res = await this.$http(req)
-        console.log(res)
-        return `发表文章成功`
+        await this.$http(this.$route.name === 'articleEdit' ? editReq : createReq)
+        this.$notify({
+          title: '成功',
+          message: '新建文章成功',
+          type: 'success'
+        })
+        setTimeout(() => {
+          this.$router.push({
+            name: "articleList"
+          })
+        }, 1500)
       } catch (err) {
         console.log(err)
       }
@@ -108,19 +134,34 @@ export default {
       }
       try {
         const res = await this.$http(req)
-        this.form = res.data.articleList[0]
-        console.log('form', this.form)
+        this.form = res.data.list[0]
       } catch (err) {
         console.log(err)
       }
     }
   },
-  beforeMount () {
+  async beforeMount () {
     console.log('this.$route', this.$route)
     if (this.$route.name === 'articleEdit') {
       this.queryArticle(this.$route.params.articleId)
     } else {
-      this.queryArticle()
+      this.form = {}
+    }
+    const req = {
+      url: 'http://localhost:3030/getTagList',
+      method: 'POST',
+      data: {}
+    }
+    try {
+      const res = await this.$http(req)
+      this.options = res.data.list.map(item => {
+        return {
+          value: item.tagValue
+        }
+      })
+      console.log('res', res.data)
+    } catch (err) {
+      console.log(err)
     }
   }
 }
@@ -128,4 +169,6 @@ export default {
 <style lang="sass" scoped>
 .bottom-button
   float: right
+.width200
+  width: 200px
 </style>

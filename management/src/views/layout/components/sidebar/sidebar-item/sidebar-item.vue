@@ -13,7 +13,7 @@
       </template>
 
       <template v-for="child in item.children" v-if="!child.hidden">
-        <sidebar-item class="nest-menu" v-if="child.children&&child.children.length>0" :item="child" :key="child.path" :base-path="resolvePath(child.path)"></sidebar-item>
+        <sidebar-item class="nest-menu" v-if="child.children && child.children.length>0" :item="child" :key="child.path" :base-path="resolvePath(child.path)"></sidebar-item>
         <router-link v-else :to="resolvePath(child.path)" :key="child.name">
           <el-menu-item :index="child.path">
             <span v-if="child.meta&&child.meta.title" slot="title">{{child.meta.title}}</span>
