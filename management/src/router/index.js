@@ -12,7 +12,9 @@ export const constantRouterMap = [
     redirect: '/dashboard', // 在面包屑中是否能直接跳转
     component: layout, // 最外层组件都为 layout，使得可以在主页面 layout 中替换 router-view
     hidden: false,
-    meta: { title: '首页', icon: 'el-icon-share' }, // 在左侧 menuTree 中显示的名字和 icon
+    meta: {
+      title: '首页', icon: 'el-icon-share'
+    }, // 在左侧 menuTree 中显示的名字和 icon
     // 根据 children 的数量判断当前 menu 是叶子节点还是根节点，
     // 不将所有的 children 都放在 / 下面是因为方便面包屑
     // 对于只有一级的菜单不设置 meta 信息，面包屑会读取 meta 中的信息生成
@@ -25,10 +27,12 @@ export const constantRouterMap = [
   },
   {
     path: '/login',
-    component: layout,
+    component: _import('login/index'),
     hidden: false,
     // redirect: 'noredirect',
-    meta: { title: '登录', icon: 'el-icon-menu' },
+    meta: {
+      title: '登录', icon: 'el-icon-menu'
+    },
     children: [
       {
         path: '/login',
@@ -41,7 +45,9 @@ export const constantRouterMap = [
     name: '404',
     component: layout,
     hidden: false,
-    meta: { title: '404', icon: 'el-icon-edit' },
+    meta: {
+      title: '404', icon: 'el-icon-edit'
+    },
     children: [
       {
         path: '/404',
@@ -53,7 +59,9 @@ export const constantRouterMap = [
     path: '/icon',
     component: layout,
     hidden: false,
-    meta: { title: 'icons', icon: 'el-icon-delete' },
+    meta: {
+      title: 'icons', icon: 'el-icon-delete'
+    },
     children: [
       {
         path: '/icon',
@@ -67,74 +75,91 @@ export const constantRouterMap = [
     component: layout,
     hidden: false,
     name: 'articleList',
-    meta: { title: '文章管理', icon: 'el-icon-document' },
+    meta: {
+      title: '文章管理', icon: 'el-icon-document'
+    },
     children: [
       {
         path: '/article',
         component: _import('article/index'),
         hidden: false,
-        name: 'articleList'
-      }
-    ]
-  },
-  {
-    path: '/article/edit/:articleId',
-    component: layout,
-    hidden: true,
-    name: 'articleEdit',
-    meta: { title: '文章管理', icon: 'el-icon-document' },
-    children: [
-      {
-        path: '/article/edit/:articleId',
-        name: 'articleEdit',
-        component: _import('article/index'),
-        hidden: true,
-        meta: { title: '文章编辑' }
-      }
-    ]
-  },
-  {
-    path: '/article/detail/:articleId',
-    component: layout,
-    hidden: true,
-    name: 'articleDetail',
-    meta: { title: '文章管理', icon: 'el-icon-document' },
-    children: [
-      {
-        path: '/article/edit/:articleId',
-        name: 'articleDetail',
-        component: _import('article/index'),
-        hidden: true,
-        meta: { title: '文章详情' }
-      }
-    ]
-  },
-  {
-    path: '/article/create',
-    component: layout,
-    name: 'articleCreate',
-    hidden: true,
-    meta: { title: '文章管理', icon: 'el-icon-document' },
-    children: [
+        name: 'articleList',
+        meta: {
+          title: '文章列表', icon: 'el-icon-document'
+        }
+      },
       {
         path: '/article/create',
         name: 'articleCreate',
         component: _import('article/article-form/article-form'),
-        hidden: true,
-        meta: { title: '新建文章' }
+        hidden: false,
+        meta: {
+          title: '新建文章', icon: 'el-icon-document'
+        }
       }
     ]
   },
   {
-    path: '/tag/:tagId',
+    path: '/tag',
     component: layout,
     hidden: false,
-    meta: { title: '标签管理', icon: 'el-icon-info' },
+    meta: {
+      title: '标签管理', icon: 'el-icon-info'
+    },
     children: [
       {
-        path: '/tag/:tagId',
+        path: '/tag',
         component: _import('tag/index'),
-        hidden: false
+        hidden: false,
+        meta: {
+          title: '标签列表', icon: 'el-icon-info'
+        }
+      },
+      {
+        path: '/tag/create',
+        component: _import('tag/tag-form/tag-form'),
+        hidden: false,
+        meta: {
+          title: '新建标签', icon: 'el-icon-info'
+        }
+      }
+    ]
+  },
+  {
+    path: '/user',
+    component: layout,
+    hidden: false,
+    name: 'userList',
+    meta: {
+      title: '用户管理', icon: 'el-icon-info'
+    },
+    children: [
+      {
+        path: '/user',
+        component: _import('user/index'),
+        hidden: false,
+        name: 'userList',
+        meta: {
+          title: '用户列表', icon: 'el-icon-info'
+        }
+      },
+      {
+        path: '/user/create',
+        component: _import('user/user-form/user-form'),
+        hidden: false,
+        name: 'userCreate',
+        meta: {
+          title: '新建用户', icon: 'el-icon-info'
+        }
+      },
+      {
+        path: '/user/edit/:userId',
+        name: 'userEdit',
+        component: _import('user/user-form/user-form'),
+        hidden: false,
+        meta: {
+          title: '编辑用户', icon: 'el-icon-info'
+        }
       }
     ]
   },
@@ -142,7 +167,9 @@ export const constantRouterMap = [
     path: '/classify/:classifiesId',
     component: layout,
     hidden: false,
-    meta: { title: '分类管理', icon: 'el-icon-star-on' },
+    meta: {
+      title: '分类管理', icon: 'el-icon-star-on'
+    },
     children: [
       {
         path: '/classify/:classifiesId',
@@ -150,11 +177,72 @@ export const constantRouterMap = [
         hidden: false
       }
     ]
+  },
+  {
+    path: '/article/edit/:articleId',
+    component: layout,
+    name: 'articleEdit',
+    hidden: true,
+    meta: {
+      title: '文章管理', icon: 'el-icon-document'
+    },
+    children: [
+      {
+        path: '/article/edit/:articleId',
+        name: 'articleEdit',
+        component: _import('article/article-form/article-form'),
+        hidden: true,
+        meta: {
+          title: '编辑文章'
+        }
+      }
+    ]
+  },
+  {
+    path: '/tag/edit/:tagId',
+    component: layout,
+    name: 'tagEdit',
+    hidden: true,
+    meta: {
+      title: '标签管理', icon: 'el-icon-document'
+    },
+    children: [
+      {
+        path: '/tag/edit/:tagId',
+        name: 'tagEdit',
+        component: _import('tag/tag-form/tag-form'),
+        hidden: true,
+        meta: {
+          title: '编辑标签'
+        }
+      }
+    ]
   }
 ]
 
-export default new Router({
+const router = new Router({
   // mode: 'history', //后端支持可开
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
+
+router.beforeEach((to, from, next) => {
+  const isLogin = JSON.parse(sessionStorage.getItem('isLogin'))
+
+  if (!isLogin && to.path !== '/login' && to.path !== '/register') {
+    const currentRoute = router.currentRoute
+    if (
+      currentRoute.path === '/login' || currentRoute.path === '/register'
+    ) {
+      next(currentRoute.fullPath)
+    } else {
+      next({
+        path: '/login',
+        query: { redirect: currentRoute.fullPath }
+      })
+    }
+  } else {
+    next()
+  }
+})
+export default router

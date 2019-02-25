@@ -1,17 +1,17 @@
 <template>
   <div>
     <div class="article-search">
-      <el-select v-model="value" placeholder="分类">
-        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+      <el-select v-model="tag" placeholder="标签" clearable>
+        <el-option v-for="item in tagOptions" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-      <el-select v-model="value" placeholder="状态">
-        <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
+      <el-select v-model="state" placeholder="状态" clearable>
+        <el-option v-for="item in stateOptions" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
-      <el-input v-model="input" placeholder="标题/描述" width="60px"></el-input>
+      <el-input v-model="queryTitle" placeholder="标题/描述" width="60px" clearable></el-input>
       <el-button type="primary" @click="CreateArticle">新建文章</el-button>
-      <el-button type="primary" icon="el-icon-search">搜索</el-button>
+      <el-button type="primary" @click="queryArticle" icon="el-icon-search">搜索</el-button>
     </div>
     <divider></divider>
     <div class="article-list">
@@ -21,9 +21,9 @@
           </el-table-column>
           <el-table-column prop="title" label="标题">
           </el-table-column>
-          <el-table-column prop="classify.title" label="分类">
+          <el-table-column prop="tag" label="标签" >
           </el-table-column>
-          <el-table-column prop="author.account" label="作者">
+          <el-table-column prop="author" label="作者">
           </el-table-column>
           <el-table-column prop="state" label="状态">
           </el-table-column>
@@ -41,10 +41,15 @@
       </template>
     </div>
 
-    <!-- <div class="pagination">
-      <el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page.sync="currentPage3" :page-size="100" layout="prev, pager, next, jumper" :total="1000">
+    <div class="pagination">
+      <el-pagination
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage"
+        :page-size="10"
+        layout="total, prev, pager, next, jumper"
+        :total="total">
       </el-pagination>
-    </div> -->
+    </div>
   </div>
 </template>
 <script>
@@ -57,161 +62,30 @@ export default {
   },
   data () {
     return {
-      options: [
+      tag: "",
+      state: "",
+      tableData: [],
+      currentPage: 1,
+      limit: 10,
+      queryTitle: '',
+      total: 0,
+      tagOptions: [],
+      stateOptions: [
         {
-          value: "选项1",
-          label: "黄金糕"
+          label: "草稿",
+          value: "draft"
         },
         {
-          value: "选项2",
-          label: "双皮奶"
-        },
-        {
-          value: "选项3",
-          label: "蚵仔煎"
-        },
-        {
-          value: "选项4",
-          label: "龙须面"
-        },
-        {
-          value: "选项5",
-          label: "北京烤鸭"
+          label: "发布",
+          value: "publish"
         }
-      ],
-      value: "",
-      tableData: [
-        {
-          toc: [],
-          tags: [
-            {
-              _id: "5be7032b883e02ad8a538992",
-              title: "测试",
-              value: "test",
-              createAt: "2018-11-10T16:11:23.453Z",
-              updateAt: "2018-11-10T16:11:23.453Z",
-              __v: 0
-            }
-          ],
-          state: "publish",
-          readingQuantity: 0,
-          createAt: "2018-11-10T16:13:41.612Z",
-          updateAt: "2018-11-10T15:35:38.858Z",
-          _id: "5be703b5883e02ad8a538994",
-          author: {
-            avatar:
-              "http://p39p1kvxn.bkt.clouddn.com/FrgZ2d6bbj7Th1w3m7lD7cCLBcBj",
-            roles: ["admin", "user"],
-            lastLoginAt: "2018-11-10T16:13:18.879Z",
-            createAt: "2018-11-10T15:35:38.881Z",
-            _id: "5be6faf5883e02ad8a538991",
-            account: "admin",
-            passwd: "d94713baabbfc993ecb075d053b873c5",
-            __v: 0
-          },
-          title: "测试",
-          desc: "测试",
-          cover: "",
-          content: "测试",
-          classify: {
-            _id: "5be7035d883e02ad8a538993",
-            title: "测试分类",
-            value: "test",
-            createAt: "2018-11-10T16:12:13.535Z",
-            updateAt: "2018-11-10T16:12:13.535Z",
-            __v: 0
-          },
-          html: "<p>测试</p>\n",
-          __v: 0
-        },
-        {
-          toc: [],
-          tags: [
-            {
-              _id: "5be7032b883e02ad8a538992",
-              title: "测试",
-              value: "test",
-              createAt: "2018-11-10T16:11:23.453Z",
-              updateAt: "2018-11-10T16:11:23.453Z",
-              __v: 0
-            }
-          ],
-          state: "publish",
-          readingQuantity: 0,
-          createAt: "2018-11-10T16:13:41.612Z",
-          updateAt: "2018-11-10T15:35:38.858Z",
-          _id: "5be703b5883e02ad8a538994",
-          author: {
-            avatar:
-              "http://p39p1kvxn.bkt.clouddn.com/FrgZ2d6bbj7Th1w3m7lD7cCLBcBj",
-            roles: ["admin", "user"],
-            lastLoginAt: "2018-11-10T16:13:18.879Z",
-            createAt: "2018-11-10T15:35:38.881Z",
-            _id: "5be6faf5883e02ad8a538991",
-            account: "admin",
-            passwd: "d94713baabbfc993ecb075d053b873c5",
-            __v: 0
-          },
-          title: "测试",
-          desc: "测试",
-          cover: "",
-          content: "测试",
-          classify: {
-            _id: "5be7035d883e02ad8a538993",
-            title: "测试分类",
-            value: "test",
-            createAt: "2018-11-10T16:12:13.535Z",
-            updateAt: "2018-11-10T16:12:13.535Z",
-            __v: 0
-          },
-          html: "<p>测试</p>\n",
-          __v: 0
-        },
-        {
-          toc: [],
-          tags: [
-            {
-              _id: "5be7032b883e02ad8a538992",
-              title: "测试",
-              value: "test",
-              createAt: "2018-11-10T16:11:23.453Z",
-              updateAt: "2018-11-10T16:11:23.453Z",
-              __v: 0
-            }
-          ],
-          state: "publish",
-          readingQuantity: 0,
-          createAt: "2018-11-10T16:13:41.612Z",
-          updateAt: "2018-11-10T15:35:38.858Z",
-          _id: "5be703b5883e02ad8a538994",
-          author: {
-            avatar:
-              "http://p39p1kvxn.bkt.clouddn.com/FrgZ2d6bbj7Th1w3m7lD7cCLBcBj",
-            roles: ["admin", "user"],
-            lastLoginAt: "2018-11-10T16:13:18.879Z",
-            createAt: "2018-11-10T15:35:38.881Z",
-            _id: "5be6faf5883e02ad8a538991",
-            account: "admin",
-            passwd: "d94713baabbfc993ecb075d053b873c5",
-            __v: 0
-          },
-          title: "测试",
-          desc: "测试",
-          cover: "",
-          content: "测试",
-          classify: {
-            _id: "5be7035d883e02ad8a538993",
-            title: "测试分类",
-            value: "test",
-            createAt: "2018-11-10T16:12:13.535Z",
-            updateAt: "2018-11-10T16:12:13.535Z",
-            __v: 0
-          },
-          html: "<p>测试</p>\n",
-          __v: 0
-        }
-      ],
-      currentPage3: 1
+      ]
+    }
+  },
+  computed: {
+    offset () {
+      console.log('offset', (this.currentPage - 1) * this.limit || 0)
+      return (this.currentPage - 1) * this.limit || 0
     }
   },
   methods: {
@@ -219,10 +93,107 @@ export default {
       this.$router.push({
         name: "articleCreate"
       })
+    },
+    handleCurrentChange (page) {
+      this.fetchArticles()
+    },
+    queryArticle () {
+      this.currentPage = 1
+      this.fetchArticles()
+    },
+    async fetchArticles () {
+      let queryParams = {
+        title: this.queryTitle,
+        state: this.state,
+        tag: this.tag,
+        limit: this.limit,
+        offset: this.offset
+      }
+      let conditions = {}
+      Object.keys(queryParams).map(key => {
+        queryParams[key] && (conditions[key] = queryParams[key])
+      })
+      const req = {
+        url: 'http://localhost:3030/getArticleList',
+        method: 'POST',
+        data: conditions
+      }
+      try {
+        const res = await this.$http(req)
+        this.tableData = res.list
+        this.total = res.total
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    handleEdit (index, row) {
+      this.$router.push({
+        name: "articleEdit",
+        params: {
+          articleId: row._id
+        }
+      })
+    },
+    handleDelete (index, row) {
+      this.$confirm(`此操作将永久删除 “${row.title}” 该文章, 是否继续?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        const queryParams = {
+          _id: row._id
+        }
+        const req = {
+          url: 'http://localhost:3030/deleteArticle',
+          method: 'POST',
+          data: queryParams
+        }
+        try {
+          await this.$http(req)
+        } catch (err) {
+          console.log(err)
+        }
+        const loading = this.$loading({
+          lock: true,
+          text: 'Loading',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
+        this.fetchArticles()
+        loading.close()
+        this.$notify({
+          title: '成功',
+          type: 'success',
+          message: '删除成功!'
+        })
+      }).catch(() => {
+        this.$notify.info({
+          title: '消息',
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
     }
-    // handleCurrentChange () {
-
-    // }
+  },
+  async beforeMount () {
+    console.log(this.$route)
+    this.fetchArticles()
+    const req = {
+      url: 'http://localhost:3030/getTagList',
+      method: 'POST',
+      data: {}
+    }
+    try {
+      const res = await this.$http(req)
+      this.tagOptions = res.list.map(item => {
+        return {
+          value: item.tagValue,
+          label: item.tagValue
+        }
+      })
+    } catch (err) {
+      console.log(err)
+    }
   }
 }
 </script>

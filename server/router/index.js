@@ -1,11 +1,14 @@
 const router = require('koa-router')()
 const article = require('./article')
-// 加载模块
+const tag = require('./tag')
+const user = require('./user')
 const bodyParser = require('koa-bodyparser')
 const cors = require('koa2-cors')
 
 module.exports = function withRouter(app){
   article(app, router)
+  tag(app, router)
+  user(app, router)
   app.use(cors({
     origin: "*",
     exposeHeaders: ['WWW-Authenticate', 'Server-Authorization'],

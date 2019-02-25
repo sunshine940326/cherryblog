@@ -1,9 +1,4 @@
-module.exports = {
-  port: '3030',
-  mongodb: {
-    name: '',
-    host: 'localhost',
-    port: '27017',
-    name: 'cherryblog'
-  }
-}
+const devConfig = require('./dev')
+const prodConfig = require('./prod')
+
+module.exports = process.env.NODE_ENV === 'develop' ? devConfig : prodConfig

@@ -21,7 +21,7 @@ export default {
     ])
   },
   created () {
-    console.log('this.permission_routers', this.permission_routers)
+    // console.log('this.permission_routers', this.permission_routers)
   }
 }
 </script>

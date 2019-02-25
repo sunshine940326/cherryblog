@@ -19,6 +19,9 @@ const articleSchema = new Schema({
     type: String,
     default: 'draft'
   },
+  tag: {
+    type: String
+  },
   readingQuantity: {                   // 阅读量
     type: Number,
     default: 0,

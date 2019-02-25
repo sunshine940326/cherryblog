@@ -10,13 +10,13 @@
         width="50">
       </el-table-column>
       <el-table-column
-        prop="tagName"
-        label="标签名"
+        prop="user"
+        label="用户名"
         width="180">
       </el-table-column>
       <el-table-column
-        prop="tagValue"
-        label="value"
+        prop="password"
+        label="密码"
         width="180">
       </el-table-column>
       <el-table-column
@@ -38,16 +38,16 @@
 </template>
 <script>
 export default {
-  name: 'tag',
+  name: 'user',
   data () {
     return {
       tableData: []
     }
   },
   methods: {
-    async fetchArticles () {
+    async fetchUsers () {
       const req = {
-        url: 'http://localhost:3030/getTagList',
+        url: 'http://localhost:3030/getUserList',
         method: 'POST'
       }
       try {
@@ -67,14 +67,14 @@ export default {
     },
     handleEdit (index, row) {
       this.$router.push({
-        name: "tagEdit",
+        name: "userEdit",
         params: {
-          tagId: row._id
+          userId: row._id
         }
       })
     },
     handleDelete (index, row) {
-      this.$confirm(`此操作将永久删除 “${row.tagName}” 该标签, 是否继续?`, '提示', {
+      this.$confirm(`此操作将永久删除 “${row.user}” 该用户, 是否继续?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
@@ -83,7 +83,7 @@ export default {
           _id: row._id
         }
         const req = {
-          url: 'http://localhost:3030/deleteTag',
+          url: 'http://localhost:3030/deleteUser',
           method: 'POST',
           data: queryParams
         }
@@ -98,7 +98,7 @@ export default {
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         })
-        this.fetchArticles()
+        this.fetchUsers()
         loading.close()
         this.$message({
           type: 'success',
@@ -113,7 +113,7 @@ export default {
     }
   },
   beforeMount () {
-    this.fetchArticles()
+    this.fetchUsers()
   }
 }
 </script>
