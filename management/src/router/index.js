@@ -27,7 +27,7 @@ export const constantRouterMap = [
   },
   {
     path: '/login',
-    component: layout,
+    component: _import('login/index'),
     hidden: false,
     // redirect: 'noredirect',
     meta: {
@@ -126,6 +126,44 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/user',
+    component: layout,
+    hidden: false,
+    name: 'userList',
+    meta: {
+      title: '用户管理', icon: 'el-icon-info'
+    },
+    children: [
+      {
+        path: '/user',
+        component: _import('user/index'),
+        hidden: false,
+        name: 'userList',
+        meta: {
+          title: '用户列表', icon: 'el-icon-info'
+        }
+      },
+      {
+        path: '/user/create',
+        component: _import('user/user-form/user-form'),
+        hidden: false,
+        name: 'userCreate',
+        meta: {
+          title: '新建用户', icon: 'el-icon-info'
+        }
+      },
+      {
+        path: '/user/edit/:userId',
+        name: 'userEdit',
+        component: _import('user/user-form/user-form'),
+        hidden: false,
+        meta: {
+          title: '编辑用户', icon: 'el-icon-info'
+        }
+      }
+    ]
+  },
+  {
     path: '/classify/:classifiesId',
     component: layout,
     hidden: false,
@@ -182,8 +220,29 @@ export const constantRouterMap = [
   }
 ]
 
-export default new Router({
+const router = new Router({
   // mode: 'history', //后端支持可开
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
+
+router.beforeEach((to, from, next) => {
+  const isLogin = JSON.parse(sessionStorage.getItem('isLogin'))
+
+  if (!isLogin && to.path !== '/login' && to.path !== '/register') {
+    const currentRoute = router.currentRoute
+    if (
+      currentRoute.path === '/login' || currentRoute.path === '/register'
+    ) {
+      next(currentRoute.fullPath)
+    } else {
+      next({
+        path: '/login',
+        query: { redirect: currentRoute.fullPath }
+      })
+    }
+  } else {
+    next()
+  }
+})
+export default router

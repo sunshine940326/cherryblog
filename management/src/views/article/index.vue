@@ -120,8 +120,8 @@ export default {
       }
       try {
         const res = await this.$http(req)
-        this.tableData = res.data.list
-        this.total = res.data.total
+        this.tableData = res.list
+        this.total = res.total
       } catch (err) {
         console.log(err)
       }
@@ -185,13 +185,12 @@ export default {
     }
     try {
       const res = await this.$http(req)
-      this.tagOptions = res.data.list.map(item => {
+      this.tagOptions = res.list.map(item => {
         return {
           value: item.tagValue,
           label: item.tagValue
         }
       })
-      console.log('res', res.data)
     } catch (err) {
       console.log(err)
     }

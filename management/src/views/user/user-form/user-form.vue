@@ -1,11 +1,11 @@
 <template>
   <div>
     <el-form ref="form" :model="form" label-width="80px">
-      <el-form-item label="标签名：">
-        <el-input v-model="form.tagName"></el-input>
+      <el-form-item label="用户名：">
+        <el-input v-model="form.user"></el-input>
       </el-form-item>
-      <el-form-item label="value：">
-        <el-input v-model="form.tagValue"></el-input>
+      <el-form-item label="密码：">
+        <el-input v-model="form.password"></el-input>
       </el-form-item>
     </el-form>
 
@@ -17,35 +17,35 @@
 </template>
 <script>
 export default {
-  name: 'tagForm',
+  name: 'userForm',
   data () {
     return {
       form: {
-        tagName: '',
-        tagValue: ''
+        user: '',
+        password: ''
       }
     }
   },
   methods: {
     async onSubmit () {
       const req = {
-        url: 'http://localhost:3030/createTagItem',
+        url: 'http://localhost:3030/createUser',
         method: 'POST',
         data: {
-          tagName: this.form.tagName,
-          tagValue: this.form.tagValue
+          user: this.form.user,
+          password: this.form.password
         }
       }
       try {
         await this.$http(req)
         this.$notify({
           title: '成功',
-          message: '新建分类成功',
+          message: '新建用户成功',
           type: 'success'
         })
         setTimeout(() => {
           this.$router.push({
-            name: "tagList"
+            name: "userList"
           })
         }, 1500)
       } catch (err) {
@@ -55,15 +55,13 @@ export default {
     handleCancel () {
       history.go(-1)
     },
-    async queryArticle (id) {
+    async queryUser (id) {
       const queryParams = {
-        title: this.queryTitle,
-        limit: this.limit,
-        offset: this.offset,
-        id: id
+        user: this.user,
+        password: this.password
       }
       const req = {
-        url: 'http://localhost:3030/getTagList',
+        url: 'http://localhost:3030/getUserList',
         method: 'POST',
         data: queryParams
       }
@@ -77,9 +75,8 @@ export default {
     }
   },
   beforeMount () {
-    console.log('this.$route', this.$route)
-    if (this.$route.name === 'tagEdit') {
-      this.queryArticle(this.$route.params.tagId)
+    if (this.$route.name === 'userEdit') {
+      this.queryUser(this.$route.params.userId)
     } else {
       this.form = {}
     }

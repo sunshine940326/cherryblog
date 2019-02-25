@@ -134,7 +134,7 @@ export default {
       }
       try {
         const res = await this.$http(req)
-        this.form = res.data.list[0]
+        this.form = res.list[0]
       } catch (err) {
         console.log(err)
       }
@@ -154,12 +154,11 @@ export default {
     }
     try {
       const res = await this.$http(req)
-      this.options = res.data.list.map(item => {
+      this.options = res.list.map(item => {
         return {
           value: item.tagValue
         }
       })
-      console.log('res', res.data)
     } catch (err) {
       console.log(err)
     }

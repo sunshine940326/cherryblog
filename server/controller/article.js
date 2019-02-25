@@ -2,7 +2,6 @@ const withActions = require('./common-actions.js')
 
 module.exports = app => {
   const model = app.model['article']
-
   const ArticleController = withActions(model)({})
   
   ArticleController.createArticle = async ctx => {

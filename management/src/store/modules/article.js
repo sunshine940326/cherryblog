@@ -26,7 +26,6 @@ const actions = {
     return result
   }
 }
-
 const getters = {}
 
 export default {
