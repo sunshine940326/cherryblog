@@ -68,7 +68,6 @@ export default {
       try {
         const res = await this.$http(req)
         this.form = res.list[0]
-        console.log('form', this.form)
       } catch (err) {
         console.log(err)
       }

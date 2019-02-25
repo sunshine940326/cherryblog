@@ -11,7 +11,6 @@ module.exports = app => {
   }
   // { useNewUrlParser: true }
 
-  console.log('url', url)
   mongoose.connect(url, (err) => {
     if (err) {
       console.log(err)

@@ -70,14 +70,12 @@ export default {
       try {
         const res = await this.$http(req)
         this.form = res.list[0]
-        console.log('form', this.form)
       } catch (err) {
         console.log(err)
       }
     }
   },
   beforeMount () {
-    console.log('this.$route', this.$route)
     if (this.$route.name === 'tagEdit') {
       this.queryArticle(this.$route.params.tagId)
     } else {
