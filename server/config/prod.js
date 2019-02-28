@@ -1,5 +1,3 @@
-
-
 module.exports = {
   port: '3030',
   mongodb: {
@@ -11,7 +9,7 @@ module.exports = {
   },
   token: {
     secret: '',
-    expires: '24h',
+    expires: '120',
     unlesses: [/^\/login/]
   }
 }

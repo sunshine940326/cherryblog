@@ -61,10 +61,14 @@ axios.interceptors.response.use(
   }
 )
 /* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  store,
-  components: { App },
-  template: '<App/>'
-})
+try {
+  new Vue({
+    el: '#app',
+    router,
+    store,
+    components: { App },
+    template: '<App/>'
+  })
+} catch (e) {
+  console.log(JSON.stringify(e))
+}
