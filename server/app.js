@@ -12,7 +12,6 @@ withConnect(app)('mongodb')
 withMiddlewares(app)
 withRouter(app)
 
-console.log('process.env.NODE_ENV', process.env.NODE_ENV)
 app.listen(app.config.port, () => {
   console.log(`Server is running at http://localhost:${app.config.port}`)
 })

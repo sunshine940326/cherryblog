@@ -1,5 +1,5 @@
 module.exports = {
-  port: '3030',
+  port: '3031',
   mongodb: {
     name: 'cherryblog',
     host: '127.0.0.1',
@@ -7,7 +7,7 @@ module.exports = {
   },
   token: {
     secret: 'cherryblog',
-    expires: '4h',
-    unlesses: [/^\/login/]
+    expires: '30d',
+    unlesses: [/^\/login/, /^\/createUser/]
   }
 }
