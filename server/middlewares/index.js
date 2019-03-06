@@ -12,6 +12,5 @@ module.exports = app => {
   // app.use(gzip())
   app.use(cors())
   app.use(koaJwt({secret}).unless({path: unlesses}))
-  // app.use(verify(app));
   app.use(bodyParser())
 }

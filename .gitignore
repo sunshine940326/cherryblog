@@ -1,1 +1,4 @@
 .DS_Store
+/server/config/prod.js
+/server/connection/mongodb.js
+.travis.yml

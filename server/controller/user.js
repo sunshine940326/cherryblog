@@ -21,12 +21,13 @@ module.exports = app => {
     isUser = account[0].password === password
     if (!!isUser){
       const token = jwt.sign({ 
-        exp: Math.floor(Date.now() / 1000) + (60),
+        // exp: Math.floor(Date.now() / 1000) + (60),
         id: user._id,
         account,
         lastLoginAt: user.lastLoginAt
       }, 
-      app.config.token.secret
+      app.config.token.secret,
+      { expiresIn: app.config.token.expires }
       )
       ctx.body = ({ code: 'success', message: `登录成功`, token: token })
       // 更新最后登录时间
