@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import cookie from 'js-cookie'
 import layout from './../views/layout/layout.vue'
 const _import = require('./_import_' + process.env.NODE_ENV)
 
@@ -29,6 +30,7 @@ export const constantRouterMap = [
     path: '/login',
     component: _import('login/index'),
     hidden: false,
+    name: 'login',
     // redirect: 'noredirect',
     meta: {
       title: '登录', icon: 'el-icon-menu'
@@ -36,6 +38,24 @@ export const constantRouterMap = [
     children: [
       {
         path: '/login',
+        name: 'login',
+        component: _import('login/index')
+      }
+    ]
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: _import('login/index'),
+    hidden: false,
+    // redirect: 'noredirect',
+    meta: {
+      title: '注册', icon: 'el-icon-menu'
+    },
+    children: [
+      {
+        path: '/register',
+        name: 'register',
         component: _import('login/index')
       }
     ]
@@ -221,14 +241,13 @@ export const constantRouterMap = [
 ]
 
 const router = new Router({
-  mode: 'history',
+  // mode: 'history',
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRouterMap
 })
 
 router.beforeEach((to, from, next) => {
-  const isLogin = JSON.parse(sessionStorage.getItem('isLogin'))
-
+  const isLogin = cookie.get('isLogin')
   if (!isLogin && to.path !== '/login' && to.path !== '/register') {
     const currentRoute = router.currentRoute
     if (

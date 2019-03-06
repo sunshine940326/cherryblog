@@ -16,6 +16,8 @@
   </div>
 </template>
 <script>
+import { _getUserList, _createUser } from '@/service/user'
+
 export default {
   name: 'userForm',
   data () {
@@ -28,16 +30,12 @@ export default {
   },
   methods: {
     async onSubmit () {
-      const req = {
-        url: 'http://localhost:3030/createUser',
-        method: 'POST',
-        data: {
+      try {
+        const queryParams = {
           user: this.form.user,
           password: this.form.password
         }
-      }
-      try {
-        await this.$http(req)
+        await _createUser({queryParams})
         this.$notify({
           title: '成功',
           message: '新建用户成功',
@@ -49,29 +47,15 @@ export default {
           })
         }, 1500)
       } catch (err) {
-        console.log(err)
       }
     },
     handleCancel () {
       history.go(-1)
     },
     async queryUser (id) {
-      const queryParams = {
-        user: this.user,
-        password: this.password
-      }
-      const req = {
-        url: 'http://localhost:3030/getUserList',
-        method: 'POST',
-        data: queryParams
-      }
-      try {
-        const res = await this.$http(req)
-        this.form = res.list[0]
-        console.log('form', this.form)
-      } catch (err) {
-        console.log(err)
-      }
+      const queryParams = { id }
+      const res = await _getUserList({queryParams})
+      this.form = res.list[0]
     }
   },
   beforeMount () {

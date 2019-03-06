@@ -54,7 +54,8 @@
 </template>
 <script>
 import divider from "@/components/divider"
-
+import { _getArticleList, _deleteArticle } from '@/service/article'
+import { _getTagList } from '@/service/tag'
 export default {
   name: 'article',
   components: {
@@ -84,7 +85,6 @@ export default {
   },
   computed: {
     offset () {
-      console.log('offset', (this.currentPage - 1) * this.limit || 0)
       return (this.currentPage - 1) * this.limit || 0
     }
   },
@@ -102,29 +102,20 @@ export default {
       this.fetchArticles()
     },
     async fetchArticles () {
-      let queryParams = {
+      let conditions = {
         title: this.queryTitle,
         state: this.state,
         tag: this.tag,
         limit: this.limit,
         offset: this.offset
       }
-      let conditions = {}
-      Object.keys(queryParams).map(key => {
-        queryParams[key] && (conditions[key] = queryParams[key])
+      let queryParams = {}
+      Object.keys(conditions).map(key => {
+        conditions[key] && (queryParams[key] = conditions[key])
       })
-      const req = {
-        url: 'http://localhost:3030/getArticleList',
-        method: 'POST',
-        data: conditions
-      }
-      try {
-        const res = await this.$http(req)
-        this.tableData = res.list
-        this.total = res.total
-      } catch (err) {
-        console.log(err)
-      }
+      const res = await _getArticleList({queryParams})
+      this.tableData = res.list
+      this.total = res.total
     },
     handleEdit (index, row) {
       this.$router.push({
@@ -143,16 +134,7 @@ export default {
         const queryParams = {
           _id: row._id
         }
-        const req = {
-          url: 'http://localhost:3030/deleteArticle',
-          method: 'POST',
-          data: queryParams
-        }
-        try {
-          await this.$http(req)
-        } catch (err) {
-          console.log(err)
-        }
+        await _deleteArticle({ queryParams })
         const loading = this.$loading({
           lock: true,
           text: 'Loading',
@@ -173,27 +155,20 @@ export default {
           message: '已取消删除'
         })
       })
-    }
-  },
-  async beforeMount () {
-    console.log(this.$route)
-    this.fetchArticles()
-    const req = {
-      url: 'http://localhost:3030/getTagList',
-      method: 'POST',
-      data: {}
-    }
-    try {
-      const res = await this.$http(req)
+    },
+    async filter () {
+      const res = await _getTagList()
       this.tagOptions = res.list.map(item => {
         return {
           value: item.tagValue,
           label: item.tagValue
         }
       })
-    } catch (err) {
-      console.log(err)
     }
+  },
+  async beforeMount () {
+    this.fetchArticles()
+    this.filter()
   }
 }
 </script>

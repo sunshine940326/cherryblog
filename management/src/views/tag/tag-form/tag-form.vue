@@ -16,6 +16,7 @@
   </div>
 </template>
 <script>
+import { _getTagList, _createTagItem } from '@/service/tag'
 export default {
   name: 'tagForm',
   data () {
@@ -28,16 +29,12 @@ export default {
   },
   methods: {
     async onSubmit () {
-      const req = {
-        url: 'http://localhost:3030/createTagItem',
-        method: 'POST',
-        data: {
-          tagName: this.form.tagName,
-          tagValue: this.form.tagValue
-        }
+      const queryParams = {
+        tagName: this.form.tagName,
+        tagValue: this.form.tagValue
       }
       try {
-        await this.$http(req)
+        await _createTagItem({queryParams})
         this.$notify({
           title: '成功',
           message: '新建分类成功',
@@ -62,22 +59,11 @@ export default {
         offset: this.offset,
         id: id
       }
-      const req = {
-        url: 'http://localhost:3030/getTagList',
-        method: 'POST',
-        data: queryParams
-      }
-      try {
-        const res = await this.$http(req)
-        this.form = res.list[0]
-        console.log('form', this.form)
-      } catch (err) {
-        console.log(err)
-      }
+      const res = await _getTagList({queryParams})
+      this.form = res.list[0]
     }
   },
   beforeMount () {
-    console.log('this.$route', this.$route)
     if (this.$route.name === 'tagEdit') {
       this.queryArticle(this.$route.params.tagId)
     } else {

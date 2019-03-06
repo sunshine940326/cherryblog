@@ -37,6 +37,8 @@
   </div>
 </template>
 <script>
+import { _getUserList, _deleteUser } from '@/service/user'
+
 export default {
   name: 'user',
   data () {
@@ -46,24 +48,8 @@ export default {
   },
   methods: {
     async fetchUsers () {
-      const req = {
-        url: 'http://localhost:3030/getUserList',
-        method: 'POST'
-      }
-      try {
-        // const loading = this.$loading({
-        //   lock: true,
-        //   text: 'Loading',
-        //   spinner: 'el-icon-loading',
-        //   background: 'rgba(0, 0, 0, 0.7)'
-        // })
-        const res = await this.$http(req)
-        this.tableData = res.list
-        // loading.close()
-      } catch (err) {
-        console.log(err)
-        // loading.close()
-      }
+      const res = await _getUserList()
+      this.tableData = res.list
     },
     handleEdit (index, row) {
       this.$router.push({
@@ -82,16 +68,7 @@ export default {
         const queryParams = {
           _id: row._id
         }
-        const req = {
-          url: 'http://localhost:3030/deleteUser',
-          method: 'POST',
-          data: queryParams
-        }
-        try {
-          await this.$http(req)
-        } catch (err) {
-          console.log(err)
-        }
+        await _deleteUser({queryParams})
         const loading = this.$loading({
           lock: true,
           text: 'Loading',
