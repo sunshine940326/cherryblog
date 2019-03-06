@@ -37,6 +37,7 @@
   </div>
 </template>
 <script>
+import { _getTagList, _deleteTag } from '@/service/tag'
 export default {
   name: 'tag',
   data () {
@@ -46,24 +47,8 @@ export default {
   },
   methods: {
     async fetchArticles () {
-      const req = {
-        url: 'http://localhost:3030/getTagList',
-        method: 'POST'
-      }
-      try {
-        // const loading = this.$loading({
-        //   lock: true,
-        //   text: 'Loading',
-        //   spinner: 'el-icon-loading',
-        //   background: 'rgba(0, 0, 0, 0.7)'
-        // })
-        const res = await this.$http(req)
-        this.tableData = res.list
-        // loading.close()
-      } catch (err) {
-        console.log(err)
-        // loading.close()
-      }
+      const res = await _getTagList()
+      this.tableData = res.list
     },
     handleEdit (index, row) {
       this.$router.push({
@@ -82,16 +67,7 @@ export default {
         const queryParams = {
           _id: row._id
         }
-        const req = {
-          url: 'http://localhost:3030/deleteTag',
-          method: 'POST',
-          data: queryParams
-        }
-        try {
-          await this.$http(req)
-        } catch (err) {
-          console.log(err)
-        }
+        await _deleteTag({queryParams})
         const loading = this.$loading({
           lock: true,
           text: 'Loading',

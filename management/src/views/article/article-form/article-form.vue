@@ -51,7 +51,8 @@
 </template>
 <script>
 import cMarkdownEditor from '@/components/c-markdown-editor/c-markdown-editor'
-
+import { _getTagList } from '@/service/tag.js'
+import { _updateArticle, _createArticleItem, _getArticleList } from '@/service/article.js'
 export default {
   name: 'articleForm',
   components: { cMarkdownEditor },
@@ -70,42 +71,27 @@ export default {
         tag: []
       },
       options: [],
-      state: 'draft'
+      state: 'draft',
+      isCreate: true
     }
   },
   methods: {
     async onSubmit () {
       const { content, desc, title, tag, author } = this.form
-      const editReq = {
-        url: 'http://localhost:3030/update',
-        method: 'POST',
-        data: {
-          id: this.$route.params.articleId,
-          content,
-          desc,
-          title,
-          state: this.state,
-          tag,
-          author
-        }
-      }
-      const createReq = {
-        url: 'http://localhost:3030/createArticleItem',
-        method: 'POST',
-        data: {
-          content,
-          desc,
-          title,
-          state: this.state,
-          tag,
-          author
-        }
+      const queryParams = {
+        id: this.$route.params.articleId || null,
+        content,
+        desc,
+        title,
+        state: this.state,
+        tag,
+        author
       }
       try {
-        await this.$http(this.$route.name === 'articleEdit' ? editReq : createReq)
+        this.isCreate ? await _createArticleItem({queryParams}) : await _updateArticle({queryParams})
         this.$notify({
           title: '成功',
-          message: '新建文章成功',
+          message: this.isCreate ? '新建文章成功' : '修改文章成功',
           type: 'success'
         })
         setTimeout(() => {
@@ -119,49 +105,25 @@ export default {
     },
     handleCancel () {
       history.go(-1)
-    },
-    async queryArticle (id) {
-      const queryParams = {
-        title: this.queryTitle,
-        limit: this.limit,
-        offset: this.offset,
-        id: id
-      }
-      const req = {
-        url: 'http://localhost:3030/getArticleList',
-        method: 'POST',
-        data: queryParams
-      }
-      try {
-        const res = await this.$http(req)
-        this.form = res.list[0]
-      } catch (err) {
-        console.log(err)
-      }
     }
   },
   async beforeMount () {
-    console.log('this.$route', this.$route)
     if (this.$route.name === 'articleEdit') {
-      this.queryArticle(this.$route.params.articleId)
+      this.isCreate = false
+      const queryParams = {
+        id: this.$route.params.articleId
+      }
+      const res = await _getArticleList({queryParams})
+      this.form = res.list[0]
     } else {
       this.form = {}
     }
-    const req = {
-      url: 'http://localhost:3030/getTagList',
-      method: 'POST',
-      data: {}
-    }
-    try {
-      const res = await this.$http(req)
-      this.options = res.list.map(item => {
-        return {
-          value: item.tagValue
-        }
-      })
-    } catch (err) {
-      console.log(err)
-    }
+    const res = await _getTagList()
+    this.options = res.list.map(item => {
+      return {
+        value: item.tagValue
+      }
+    })
   }
 }
 </script>

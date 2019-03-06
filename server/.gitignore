@@ -2,3 +2,5 @@
 /log/
 /log/error/
 /log/normal/
+/server/config/prod.js
+/server/connection/mongodb.js
